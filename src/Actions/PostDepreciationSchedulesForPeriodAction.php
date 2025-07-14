@@ -8,10 +8,15 @@ use Illuminate\Support\Collection;
 class PostDepreciationSchedulesForPeriodAction
 {
     /**
+     * @param array $data
      * @return \Illuminate\Support\Collection<\Hickr\Accounting\Models\JournalEntry>
      */
-    public static function execute(int $tenantId, string $from, string $to): Collection
+    public static function execute(array $data): Collection
     {
+        $tenantId = $data['tenant_id'];
+        $from = $data['from'] ?? $data['period'];
+        $to = $data['to'] ?? $data['period'];
+
         $schedules = DepreciationSchedule::query()
             ->where('tenant_id', $tenantId)
             ->whereBetween('period', [Carbon::parse($from)->startOfMonth(), Carbon::parse($to)->endOfMonth()])
@@ -19,14 +24,8 @@ class PostDepreciationSchedulesForPeriodAction
             ->with(['asset.category'])
             ->get();
 
-        $entries = collect();
-
-        foreach ($schedules as $schedule) {
-            $entries->push(
-                PostDepreciationScheduleAction::execute($schedule)
-            );
-        }
-
-        return $entries;
+        return $schedules->map(fn($schedule) =>
+        PostDepreciationScheduleAction::execute($schedule)
+        );
     }
 }

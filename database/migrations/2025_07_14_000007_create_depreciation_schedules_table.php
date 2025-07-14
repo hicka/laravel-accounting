@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->foreignId('tenant_id');
             $table->foreignId('fixed_asset_id');
             $table->date('period');
+            $table->date('date')->nullable();
             $table->decimal('amount', 20, 2);
             $table->boolean('posted')->default(false);
             $table->timestamps();
