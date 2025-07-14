@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->foreignId('account_id')->constrained('chart_of_accounts')->cascadeOnDelete();
             $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
             $table->decimal('amount', 20, 6); // in base currency
+            $table->json('meta')->nullable();
             $table->decimal('base_currency_amount', 20, 6)->nullable();
             $table->enum('type', ['debit', 'credit']);
             $table->text('memo')->nullable();

@@ -8,6 +8,10 @@ class JournalLine extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'meta' => 'array',
+    ];
+
     public function entry()
     {
         return $this->belongsTo(JournalEntry::class);

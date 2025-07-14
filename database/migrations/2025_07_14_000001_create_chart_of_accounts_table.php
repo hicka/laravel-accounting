@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->string('code')->unique(); // e.g., 1000
             $table->string('name'); // e.g., Cash
             $table->enum('type', [
-                'asset', 'liability', 'equity', 'revenue', 'expense','cost_of_sales','non_taxable'
+                'asset', 'liability', 'equity', 'revenue', 'expense','cost_of_sales','non_taxable','gst_input'
             ]);
             $table->string('tax_type')->nullable()->after('type');
             $table->boolean('is_contra')->default(false); // for contra accounts

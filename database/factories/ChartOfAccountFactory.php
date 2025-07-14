@@ -18,4 +18,11 @@ class ChartOfAccountFactory extends Factory
             'type' => $this->faker->randomElement(['asset', 'liability', 'equity', 'revenue', 'expense']),
         ];
     }
+
+    public function gstInput()
+    {
+        return $this->state([
+            'type' => ChartOfAccount::TYPE_GST_INPUT,
+        ]);
+    }
 }
