@@ -13,14 +13,19 @@ class CashFlowStatementReportAction
         $from = Carbon::parse($data['date_from']);
         $to = Carbon::parse($data['date_to']);
 
-        $lines = JournalLine::with('account')
+        $lines = JournalLine::query()
+            ->with('account')
             ->where('tenant_id', $tenantId)
-            ->whereHas('journalEntry', fn ($q) =>
-            $q->whereBetween('date', [$from, $to])
-            )
+            ->whereHas('journalEntry', function ($query) use ($from, $to) {
+                $query->whereBetween('date', [$from, $to]);
+            })
             ->get();
 
-        $map = config('accounting.cash_flow_map');
+        $map = config('accounting.cash_flow_map', [
+            'operating' => ['revenue', 'expense'],
+            'investing' => ['asset'],
+            'financing' => ['equity', 'liability'],
+        ]);
 
         $result = [
             'operating' => 0,
@@ -29,8 +34,14 @@ class CashFlowStatementReportAction
         ];
 
         foreach ($lines as $line) {
-            $type = $line->account->type;
-            $amount = $line->type === 'debit' ? $line->base_currency_amount : -$line->base_currency_amount;
+            $type = strtolower($line->account->type);
+            $amount = $line->base_currency_amount;
+
+            if (in_array($type, ['revenue', 'liability', 'equity'])) {
+                $amount *= $line->type === 'credit' ? 1 : -1;
+            } else {
+                $amount *= $line->type === 'debit' ? -1 : 1;
+            }
 
             foreach ($map as $section => $accountTypes) {
                 if (in_array($type, $accountTypes)) {
@@ -41,12 +52,8 @@ class CashFlowStatementReportAction
         }
 
         return [
-            'cash_flows' => [
-                'operating' => round($result['operating'], 2),
-                'investing' => round($result['investing'], 2),
-                'financing' => round($result['financing'], 2),
-            ],
-            'net_cash_flow' => round(array_sum($result), 2),
+            'cash_flows' => $result,
+            'net_cash_flow' => array_sum($result),
         ];
     }
 }
