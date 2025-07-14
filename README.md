@@ -132,4 +132,4 @@ interface RegionalModule {
 
 ## License
 
-MIT License
+MIT License.
