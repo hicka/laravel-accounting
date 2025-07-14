@@ -13,4 +13,10 @@ return [
 
     // Optionally, if your tenant model uses a custom table
     'tenant_table' => 'tenants',
+
+    'cash_flow_map' => [
+        'operating' => ['revenue', 'expense'],
+        'investing' => ['asset'],
+        'financing' => ['equity', 'liability'],
+    ],
 ];
