@@ -96,8 +96,47 @@ PostJournalEntryAction::execute([
     ]
 ]);
 ```
-
 ---
+
+
+#### 🏗️ Fixed Asset Management
+- Add and manage fixed assets via `FixedAsset` model.
+- Support for depreciation via:
+  - Straight Line method
+  - Reducing Balance method
+- Bulk depreciation processing supported per period.
+- Link each asset to an `AssetCategory` and account mapping.
+
+```php
+use Hickr\Accounting\Models\FixedAsset;
+
+$asset = FixedAsset::create([
+    'tenant_id' => 1,
+    'category_id' => 2,
+    'name' => 'Dell Laptop',
+    'purchase_date' => '2024-01-01',
+    'cost' => 2000,
+]);
+```
+
+#### 🧾 MIRA Compliance (Maldives)
+- Schedule 1 to Schedule 5 GST Reports implemented.
+- Income Tax Schedule 1, 2, and 4 supported.
+- `meta` field on `journal_lines` used for enhanced tagging.
+- Country-specific config under `modules -> mira`.
+
+```php
+$config = config('accounting.modules.mira');
+$rate = $config['gst']['standard_rate']; // 6%
+```
+
+#### 📈 Financial Statements
+- Profit & Loss
+- Balance Sheet
+- Trial Balance (grouped + flat)
+- Cash Flow Statement
+
+
 
 ## 📊 Reports
 
@@ -143,6 +182,27 @@ $data = GeneralLedgerReportAction::run([
 ```
 
 ---
+
+
+### 🧠 Advanced Configuration Notes
+
+```php
+// config/accounting.php
+
+'tenant_model' => App\Models\Tenant::class,
+
+'tenant_table' => 'tenants',
+
+'modules' => [
+    'mira' => [
+        'enabled' => true,
+        'gst' => [
+            'standard_rate' => 0.06,
+            'zero_rate' => 0.0,
+        ],
+    ],
+],
+```
 
 ## ✅ Testing
 
