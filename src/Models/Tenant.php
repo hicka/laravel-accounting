@@ -57,4 +57,11 @@ class Tenant extends Model
     {
         return $this->hasMany(\Hickr\Accounting\Models\Ledger::class, 'tenant_id');
     }
+
+    public function getBaseCurrency(): string
+    {
+        return $this->base_currency ?? config('accounting.default_currency', 'MVR');
+    }
+
+
 }

@@ -13,7 +13,7 @@ class PostJournalEntryAction
     {
         return DB::transaction(function () use ($data) {
             $tenant = $data['tenant'] ?? config('accounting.tenant_model')::find($data['tenant_id']);
-            $baseCurrency = $tenant->base_currency ?? config('accounting.default_currency', 'MVR');
+            $baseCurrency = $tenant->getBaseCurrency();
 
             $entry = JournalEntry::create([
                 'tenant_id'   => $tenant->id,
