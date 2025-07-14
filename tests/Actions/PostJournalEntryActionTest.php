@@ -32,8 +32,19 @@ class PostJournalEntryActionTest extends TestCase
         // Create tenant and accounts
         $this->tenant = Tenant::factory()->create(['base_currency' => 'MVR']);
 
-        ChartOfAccount::create(['tenant_id' => $this->tenant->id, 'code' => '1000', 'name' => 'Cash', 'type' => 'asset']);
-        ChartOfAccount::create(['tenant_id' => $this->tenant->id, 'code' => '3000', 'name' => 'Equity', 'type' => 'equity']);
+
+        ChartOfAccount::factory()->create([
+            'code' => '1000',
+            'tenant_id' => $this->tenant->id,
+            'type' => 'asset',
+            'name' => 'Cash',
+        ]);
+        ChartOfAccount::factory()->create([
+            'code' => '3000',
+            'tenant_id' => $this->tenant->id,
+            'type' => 'equity',
+            'name' => 'Equity',
+        ]);
     }
 
     /** @test */

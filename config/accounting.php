@@ -19,4 +19,11 @@ return [
         'investing' => ['asset'],
         'financing' => ['equity', 'liability'],
     ],
+
+    'tax_types' => [
+        'standard_gst',
+        'zero_gst',
+        'exempt',
+        'input_tax',
+    ],
 ];

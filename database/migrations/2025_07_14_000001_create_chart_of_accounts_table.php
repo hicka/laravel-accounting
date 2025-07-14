@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->enum('type', [
                 'asset', 'liability', 'equity', 'revenue', 'expense'
             ]);
+            $table->string('tax_type')->nullable()->after('type');
             $table->boolean('is_contra')->default(false); // for contra accounts
             $table->timestamps();
         });
