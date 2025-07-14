@@ -15,7 +15,7 @@ class ChartOfAccountFactory extends Factory
             'tenant_id' => 1,
             'code' => $this->faker->unique()->numerify('1###'),
             'name' => $this->faker->words(2, true),
-            'type' => $this->faker->randomElement(['asset', 'liability', 'equity', 'income', 'expense']),
+            'type' => $this->faker->randomElement(['asset', 'liability', 'equity', 'revenue', 'expense']),
         ];
     }
 }
