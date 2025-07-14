@@ -2,6 +2,7 @@
 
 namespace Hickr\Accounting\Models;
 
+use Database\Factories\TenantFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,6 +23,11 @@ class Tenant extends Model
     protected $casts = [
         'region_module' => 'string',
     ];
+
+    protected static function newFactory()
+    {
+        return TenantFactory::new();
+    }
 
     /**
      * Accessor for region module (e.g., 'mira', 'global')
