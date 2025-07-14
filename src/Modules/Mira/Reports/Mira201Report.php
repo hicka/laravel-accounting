@@ -4,6 +4,7 @@ namespace Hickr\Accounting\Modules\Mira\Reports;
 
 use Hickr\Accounting\Models\JournalLine;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Config;
 
 class Mira201Report
 {
@@ -21,6 +22,9 @@ class Mira201Report
             })
             ->get();
 
+        $gstRate = Config::get('accounting.modules.mira.gst_rates.standard', 0.06);
+        $inputRate = Config::get('accounting.modules.mira.gst_rates.input', 0.06);
+
         $totals = [
             'taxable_sales' => 0,
             'zero_rated_sales' => 0,
@@ -37,7 +41,7 @@ class Mira201Report
                 case 'standard_gst':
                     if ($line->type === 'credit') {
                         $totals['taxable_sales'] += $amount;
-                        $totals['output_tax'] += $amount * 0.06; // 6% default rate
+                        $totals['output_tax'] += $amount * $gstRate;
                     }
                     break;
 
@@ -55,7 +59,7 @@ class Mira201Report
 
                 case 'input_tax':
                     if ($line->type === 'debit') {
-                        $totals['input_tax'] += $amount * 0.06; // 6% claimable
+                        $totals['input_tax'] += $amount * $inputRate;
                     }
                     break;
             }

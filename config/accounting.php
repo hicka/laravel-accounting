@@ -26,4 +26,13 @@ return [
         'exempt',
         'input_tax',
     ],
+
+    'modules' => [
+        'mira' => [
+            'gst_rates' => [
+                'standard' => 0.06,
+                'input' => 0.06,
+            ],
+        ],
+    ],
 ];
