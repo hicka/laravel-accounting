@@ -18,10 +18,12 @@ class GeneralLedgerReportAction
             ->whereHas('journalEntry', fn ($q) =>
             $q->whereBetween('date', [$from, $to])
             )
-            ->orderBy('account_id')
-            ->orderBy('journalEntry.date')
-            ->orderBy('id')
-            ->get();
+            ->get()
+            ->sortBy([
+                fn ($line) => $line->account_id,
+                fn ($line) => optional($line->journalEntry)->date ?? now(),
+                fn ($line) => $line->id,
+            ]);
 
         $grouped = $lines->groupBy('account_id');
 
@@ -32,7 +34,7 @@ class GeneralLedgerReportAction
 
             $entriesMapped = $entries->map(function ($line) {
                 return [
-                    'date' => $line->journalEntry->date->toDateString(),
+                    'date' => $line->journalEntry->date,
                     'description' => $line->journalEntry->description,
                     'type' => $line->type,
                     'amount' => $line->base_currency_amount,

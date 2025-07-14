@@ -8,6 +8,8 @@ class JournalEntry extends Model
 {
     protected $guarded = [];
 
+
+
     protected static function booted()
     {
         static::creating(function ($entry) {
