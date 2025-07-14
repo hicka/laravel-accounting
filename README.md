@@ -1,135 +1,162 @@
 # Laravel Accounting Package
 
-> IFRS-compliant, multi-tenant, multi-currency accounting system for Laravel apps. Modular support for regional compliance (e.g., MIRA Maldives).
+A modular, multi-tenant, multi-currency accounting engine for Laravel 12+, supporting IFRS-compliant reports and regional extensions (e.g., MIRA Maldives).
 
 ---
 
 ## ✨ Features
 
-- Double-entry accounting (Journal + Ledger)
-- Multi-tenant support (tenant = business/entity)
-- Multi-currency ready (use your base + foreign currencies)
-- Modular regional compliance (e.g., MIRA reports)
-- Extensible Chart of Accounts
-- UUID-based references for traceability
-- Drop-in ready for SaaS or enterprise Laravel apps
+- 📚 Double-entry accounting (Journal, Ledger, COA)
+- 🧾 IFRS-compliant financial reports:
+    - Trial Balance
+    - Profit & Loss
+    - Balance Sheet
+    - General Ledger
+- 🌐 Multi-currency support with exchange rates and inverse logic
+- 🏢 Multi-tenancy (per business/entity)
+- 🌍 Modular regional compliance (e.g., MIRA 201 via plugin)
+- ✅ Pest/PHPUnit test coverage
+- 🧱 Clean architecture & Laravel Action-based design
+- 🛠️ Configurable tenant model and table names
 
 ---
 
-## 📦 Installation
+## ⚙️ Installation
 
 ```bash
 composer require hickr/laravel-accounting
-php artisan vendor:publish --tag=config
 ```
 
-### Add the following to your app's `composer.json`:
-```json
-"repositories": [
-  {
-    "type": "path",
-    "url": "./packages/hickr/laravel-accounting"
-  }
-]
+### Publish Config & Migrations
+
+```bash
+php artisan vendor:publish --tag=accounting-config
+php artisan vendor:publish --tag=accounting-migrations
 ```
 
 ---
 
-## ⚙️ Configuration
+## 🚀 Usage Examples
 
-In `config/accounting.php`:
-
-```php
-return [
-    'tenant_model' => App\Models\Tenant::class,
-    'tenant_table' => 'tenants',
-    'region_module_column' => 'region_module',
-    'multi_currency' => true,
-    'default_currency' => 'MVR',
-];
-```
-
-In your `tenants` table (or `businesses`), add:
+### Post a Journal Entry
 
 ```php
-$table->string('region_module')->default('global');
-```
-
----
-
-## 🧾 Journal Entry Posting
-
-```php
-use Hickr\Accounting\Actions\PostJournalEntryAction;
-
-$entry = PostJournalEntryAction::execute([
-    'tenant_id' => $tenant->id,
-    'date' => '2025-07-14',
+PostJournalEntryAction::execute([
+    'tenant_id' => 1,
+    'date' => '2025-01-01',
     'description' => 'Initial capital',
+    'currency_code' => 'MVR',
+    'exchange_rate' => 1,
     'lines' => [
-        [
-            'account_id' => 1, // Cash
-            'amount' => '10000.000000',
-            'side' => 'debit',
-            'memo' => 'Owner deposit',
-        ],
-        [
-            'account_id' => 2, // Equity
-            'amount' => '10000.000000',
-            'side' => 'credit',
-            'memo' => 'Capital account',
-        ],
+        ['account_id' => 1, 'type' => 'debit', 'amount' => 1000],
+        ['account_id' => 2, 'type' => 'credit', 'amount' => 1000],
     ],
 ]);
 ```
 
-Throws `UnbalancedJournalException` if debits ≠ credits.
-
 ---
 
-## 🧩 Regional Modules
+## 📊 Reports
 
-Regional logic (like MIRA GST201, WHT) is resolved per-tenant at runtime.
+### Trial Balance
 
 ```php
-use Hickr\Accounting\Support\Region\RegionResolver;
-
-$module = RegionResolver::resolveForTenant($tenant);
-
-$gst = $module?->generateReport('gst201', [
-    'start_date' => '2025-01-01',
-    'end_date' => '2025-03-31',
+$data = TrialBalanceReportAction::run([
+    'tenant_id' => 1,
+    'date_from' => '2025-01-01',
+    'date_to' => '2025-12-31',
+    'group_by_type' => false,
 ]);
 ```
 
-Each region module implements:
+### Profit & Loss
 
 ```php
-interface RegionalModule {
-    public function getAvailableReports(): array;
-    public function generateReport(string $key, array $params);
-}
+$data = ProfitAndLossReportAction::run([
+    'tenant_id' => 1,
+    'date_from' => '2025-01-01',
+    'date_to' => '2025-12-31',
+]);
+```
+
+### Balance Sheet
+
+```php
+$data = BalanceSheetReportAction::run([
+    'tenant_id' => 1,
+    'date_to' => '2025-12-31',
+    'group_by_account' => true,
+]);
+```
+
+### General Ledger
+
+```php
+$data = GeneralLedgerReportAction::run([
+    'tenant_id' => 1,
+    'date_from' => '2025-01-01',
+    'date_to' => '2025-12-31',
+]);
 ```
 
 ---
 
-## ✅ Requirements
+## ✅ Testing
 
-- PHP ^8.2
-- Laravel 12+
+```bash
+vendor/bin/pest
+# or
+vendor/bin/phpunit
+```
 
----
-
-## 📚 Upcoming
-
-- Brick\Money integration for currency-safe math
-- Default chart of accounts seeder
-- Balance sheet, P&L reports
-- MIRA GST201, WHT, Income Tax reports
-- Pest + PHPUnit test coverage
+Uses [Orchestra Testbench](https://github.com/orchestral/testbench) to run package tests.
 
 ---
 
-## License
+## 🧩 Regional Compliance
 
-MIT License.
+This package supports regional reporting plugins via config. For example:
+
+```php
+// config/accounting.php
+'region_module' => \Hickr\Accounting\MIRA\MiraModule::class,
+```
+
+MIRA reports (GST 201, Income Tax) can be developed as standalone modules.
+
+---
+
+## 🧪 Tests Included
+
+- Journal entries (balancing, currency conversion)
+- Trial balance (flat & grouped)
+- Profit & Loss
+- Balance Sheet
+- General Ledger
+
+---
+
+## 🧱 Architecture
+
+- Laravel Actions (`lorisleiva/laravel-actions`)
+- Tenant-aware by config
+- Supports soft-deleted tenants
+- Region support via strategy pattern
+
+---
+
+## 🗂️ Roadmap
+
+- [x] Trial Balance
+- [x] Profit & Loss
+- [x] Balance Sheet
+- [x] General Ledger
+- [ ] Cash Flow Statement
+- [ ] MIRA 201, 401, Income Tax Schedules
+- [ ] Journal approvals / audit trail
+
+---
+
+## 🧾 License
+
+MIT License
