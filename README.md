@@ -241,7 +241,6 @@ MIRA reports (GST 201, Income Tax) can be developed as standalone modules.
 
 ## 🧱 Architecture
 
-- Laravel Actions (`lorisleiva/laravel-actions`)
 - Tenant-aware by config
 - Supports soft-deleted tenants
 - Region support via strategy pattern
