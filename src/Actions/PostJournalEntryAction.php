@@ -1,6 +1,7 @@
 <?php
 namespace Hickr\Accounting\Actions;
 
+use Hickr\Accounting\Models\ChartOfAccount;
 use Hickr\Accounting\Models\Tenant;
 use Illuminate\Support\Facades\DB;
 use Hickr\Accounting\Models\JournalEntry;
@@ -65,6 +66,24 @@ class PostJournalEntryAction
             $entry->save();
 
             foreach ($data['lines'] as $line) {
+                $account = ChartOfAccount::findOrFail($line['account_id']);
+
+                // Validate GST type is only used on revenue accounts
+                if (
+                    isset($line['meta']['gst_type']) &&
+                    !in_array($line['meta']['gst_type'], ['zero_rated', 'exempt'])
+                ) {
+                    throw new \InvalidArgumentException("Invalid gst_type value: {$line['meta']['gst_type']}");
+                }
+
+                if (
+                    isset($line['meta']['gst_type']) &&
+                    $account->type !== ChartOfAccount::TYPE_REVENUE
+                ) {
+                    throw new \InvalidArgumentException("gst_type is only applicable to revenue accounts.");
+                }
+
+
                 JournalLine::create([
                     'tenant_id' => $data['tenant_id'],
                     'journal_entry_id' => $entry->id,
