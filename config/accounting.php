@@ -33,6 +33,14 @@ return [
                 'standard' => 0.06,
                 'input' => 0.06,
             ],
+            'wht_rates' => [
+                'wht_professional_fees' => 0.10,
+                'wht_rent' => 0.05,
+                'wht_contract_services' => 0.03,
+            ],
+            'income_tax' => [
+                'adjustments' => [], // custom logic (TBD)
+            ],
         ],
     ],
 ];
