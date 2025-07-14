@@ -1,0 +1,35 @@
+{
+    "name": "hickr/laravel-accounting",
+    "description": "Laravel Accounting App",
+    "license": "-",
+    "autoload": {
+        "psr-4": {
+            "Hickr\\Accounting\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Hickr\\Accounting\\AccountingServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "F. Ahmed",
+            "email": "19439535+hicka@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^12.0",
+        "illuminate/database": "^12.0",
+        "brick/money": "^0.10.1",
+        "spatie/laravel-package-tools": "^1.92",
+        "ramsey/uuid": "^4.9",
+        "doctrine/dbal": "^4.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.2"
+    }
+}
