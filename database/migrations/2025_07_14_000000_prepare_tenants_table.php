@@ -15,8 +15,10 @@ return new class extends Migration {
                 $table->string('name');
                 $table->string('region_module')->default('global');
                 $table->string('base_currency')->default('MVR');
+                $table->softDeletes();
                 $table->timestamps();
             });
+
         } else {
             // Just add columns if they don't exist
             Schema::table($tableName, function (Blueprint $table) use ($tableName) {
@@ -26,6 +28,12 @@ return new class extends Migration {
 
                 if (!Schema::hasColumn($tableName, 'base_currency')) {
                     $table->string('base_currency')->default('MVR');
+                }
+
+                if (Schema::hasTable($tableName) && !Schema::hasColumn($tableName, 'deleted_at')) {
+                    Schema::table($tableName, function (Blueprint $table) {
+                        $table->softDeletes();
+                    });
                 }
             });
         }
@@ -44,6 +52,12 @@ return new class extends Migration {
                 if (Schema::hasColumn($tableName, 'base_currency')) {
                     $table->dropColumn('base_currency');
                 }
+            });
+        }
+
+        if (Schema::hasTable($tableName) && Schema::hasColumn($tableName, 'deleted_at')) {
+            Schema::table($tableName, function (Blueprint $table) {
+                $table->dropSoftDeletes();
             });
         }
     }

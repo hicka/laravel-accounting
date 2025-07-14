@@ -12,6 +12,9 @@ return new class extends Migration {
             $table->uuid('reference')->unique(); // UUID for traceability
             $table->string('description')->nullable();
             $table->date('date');
+            $table->string('currency_code');         // e.g., USD
+            $table->decimal('exchange_rate', 18, 6); // exchange rate relative to base currency
+            $table->decimal('base_currency_amount', 18, 2); // calculated value
             $table->timestamps();
         });
     }
