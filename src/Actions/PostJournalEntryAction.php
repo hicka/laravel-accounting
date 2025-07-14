@@ -77,6 +77,19 @@ class PostJournalEntryAction
                 }
 
                 if (
+                    isset($line['meta']['supplier_name']) ||
+                    isset($line['meta']['gst_amount']) // hinting it's a GST input
+                ) {
+                    $requiredMetaFields = ['supplier_name', 'supplier_tin', 'invoice_number', 'net_amount', 'gst_amount'];
+
+                    foreach ($requiredMetaFields as $field) {
+                        if (empty($line['meta'][$field])) {
+                            throw new \InvalidArgumentException("Missing `$field` in journal line meta for GST Schedule 5 compliance.");
+                        }
+                    }
+                }
+
+                if (
                     isset($line['meta']['gst_type']) &&
                     $account->type !== ChartOfAccount::TYPE_REVENUE
                 ) {
