@@ -12,7 +12,9 @@ class PostJournalEntryAction
     public static function execute(array $data): JournalEntry
     {
         return DB::transaction(function () use ($data) {
-            $tenant = $data['tenant'] ?? config('accounting.tenant_model')::find($data['tenant_id']);
+            $tenant = $data['tenant']
+                ?? config('accounting.tenant_model')::find($data['tenant_id']);
+
             $baseCurrency = $tenant->getBaseCurrency();
 
             $entry = JournalEntry::create([

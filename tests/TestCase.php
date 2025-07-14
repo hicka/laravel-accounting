@@ -6,33 +6,32 @@ use Hickr\Accounting\Models\Tenant;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Hickr\Accounting\AccountingServiceProvider;
 
-abstract class TestCase extends BaseTestCase
+class TestCase extends BaseTestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             AccountingServiceProvider::class,
         ];
     }
 
-    protected function getEnvironmentSetUp($app)
+    protected function defineDatabaseMigrations(): void
     {
-        // Minimal config overrides
-        $app['config']->set('accounting.tenant_model', Tenant::class);
-        $app['config']->set('accounting.default_currency', 'MVR');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+    }
 
-        // Optional: in-memory SQLite for fast testing
-        $databasePath = __DIR__ . '/../../vendor/orchestra/testbench-core/laravel/database/database.sqlite';
-
+    protected function getEnvironmentSetUp($app): void
+    {
+        $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite', [
-            'driver' => 'sqlite',
-            'database' => $databasePath,
-            'prefix' => '',
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
+            'prefix'   => '',
         ]);
+
+        // 🛠 Set tenant model config here:
+        $app['config']->set('accounting.tenant_model', \Hickr\Accounting\Models\Tenant::class);
+        $app['config']->set('accounting.tenant_table', 'tenants');
+        $app['config']->set('accounting.default_currency', 'MVR');
     }
 }

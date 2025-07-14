@@ -9,6 +9,7 @@ use Hickr\Accounting\Models\ChartOfAccount;
 use Hickr\Accounting\Models\JournalEntry;
 use Hickr\Accounting\Models\JournalLine;
 use Hickr\Accounting\Exceptions\UnbalancedJournalException;
+use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
 
 
@@ -20,8 +21,13 @@ class PostJournalEntryActionTest extends TestCase
     {
         parent::setUp();
 
+        // Set up schema and run migrations manually
+        foreach (glob(__DIR__ . '/../../database/migrations/*.php') as $filename) {
+            include_once $filename;
+            (require $filename)->up();
+        }
         // Run package migrations
-        $this->artisan('migrate', ['--database' => 'sqlite']);
+//        $this->artisan('migrate', ['--database' => 'sqlite']);
 
         // Create tenant and accounts
         $this->tenant = Tenant::factory()->create(['base_currency' => 'MVR']);
@@ -34,7 +40,7 @@ class PostJournalEntryActionTest extends TestCase
     public function test_it_posts_a_balanced_single_currency_journal_entry()
     {
         $entry = PostJournalEntryAction::execute([
-            'tenant_id' => $this->tenant->id,
+            'tenant' => $this->tenant,
             'date' => now()->toDateString(),
             'description' => 'Capital injection',
             'lines' => [

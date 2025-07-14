@@ -11,8 +11,6 @@ class Tenant extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'tenants'; // or 'businesses' based on config/accounting.php
-
     protected $fillable = [
         'name',
         'email',
