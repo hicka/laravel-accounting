@@ -56,6 +56,49 @@ PostJournalEntryAction::execute([
 
 ---
 
+## 🧾 Tax Invoice Entry Example
+
+```php
+PostJournalEntryAction::execute([
+    'tenant_id' => 1,
+    'date' => '2025-07-15',
+    'description' => 'MIRA GST Sale',
+    'currency_code' => 'MVR',
+    'exchange_rate' => 1,
+    'lines' => [
+        [
+            'account_id' => 1, // Cash
+            'type' => 'debit',
+            'amount' => 1060,
+            'base_currency_amount' => 1060,
+        ],
+        [
+            'account_id' => 2, // Revenue
+            'type' => 'credit',
+            'amount' => 1000,
+            'base_currency_amount' => 1000,
+            'meta' => [
+                'gst_type' => 'standard-rated',
+                'gst_rate' => 6,
+                'net_amount' => 1000,
+                'gst_amount' => 60,
+                'invoice_number' => 'INV-1001',
+                'customer_name' => 'Ali Hassan',
+                'customer_tin' => '1010101GST001',
+            ],
+        ],
+        [
+            'account_id' => 3, // GST Payable
+            'type' => 'credit',
+            'amount' => 60,
+            'base_currency_amount' => 60,
+        ],
+    ]
+]);
+```
+
+---
+
 ## 📊 Reports
 
 ### Trial Balance
