@@ -41,6 +41,7 @@ return [
             'income_tax' => [
                 'adjustments' => [], // custom logic (TBD)
             ],
+            'enable_fixed_asset_reporting' => true,
         ],
     ],
 ];
