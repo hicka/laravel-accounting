@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->string('code')->unique(); // e.g., 1000
             $table->string('name'); // e.g., Cash
             $table->enum('type', [
-                'asset', 'liability', 'equity', 'income', 'expense'
+                'asset', 'liability', 'equity', 'revenue', 'expense'
             ]);
             $table->boolean('is_contra')->default(false); // for contra accounts
             $table->timestamps();

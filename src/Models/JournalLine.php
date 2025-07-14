@@ -2,6 +2,7 @@
 namespace Hickr\Accounting\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class JournalLine extends Model
 {
@@ -11,6 +12,12 @@ class JournalLine extends Model
     {
         return $this->belongsTo(JournalEntry::class);
     }
+
+    public function journalEntry(): BelongsTo
+    {
+        return $this->belongsTo(\Hickr\Accounting\Models\JournalEntry::class);
+    }
+
 
     public function account()
     {
