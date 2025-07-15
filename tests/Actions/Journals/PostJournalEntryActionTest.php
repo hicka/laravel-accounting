@@ -7,45 +7,14 @@ use Hickr\Accounting\Exceptions\UnbalancedJournalException;
 use Hickr\Accounting\Models\ChartOfAccount;
 use Hickr\Accounting\Models\JournalEntry;
 use Hickr\Accounting\Models\Tenant;
+use Hickr\Accounting\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Orchestra\Testbench\TestCase;
 
 
 class PostJournalEntryActionTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // Set up schema and run migrations manually
-        foreach (glob(__DIR__ . '/../../database/migrations/*.php') as $filename) {
-            include_once $filename;
-            (require $filename)->up();
-        }
-        // Run package migrations
-//        $this->artisan('migrate', ['--database' => 'sqlite']);
-
-        // Create tenant and accounts
-        $this->tenant = Tenant::factory()->create(['base_currency' => 'MVR']);
-
-
-        ChartOfAccount::factory()->create([
-            'code' => '1000',
-            'tenant_id' => $this->tenant->id,
-            'type' => 'asset',
-            'name' => 'Cash',
-        ]);
-        ChartOfAccount::factory()->create([
-            'code' => '3000',
-            'tenant_id' => $this->tenant->id,
-            'type' => 'equity',
-            'name' => 'Equity',
-        ]);
-    }
-
-    /** @test */
     public function test_it_posts_a_balanced_single_currency_journal_entry()
     {
         $tenant = Tenant::factory()->create([
@@ -77,7 +46,7 @@ class PostJournalEntryActionTest extends TestCase
         $this->assertCount(2, $entry->lines);
     }
 
-    /** @test */
+
     public function test_it_converts_foreign_currency_to_base_and_posts()
     {
         $tenant = \Hickr\Accounting\Models\Tenant::factory()->create([
@@ -112,7 +81,7 @@ class PostJournalEntryActionTest extends TestCase
         $this->assertCount(2, $entry->lines);
     }
 
-    /** @test */
+
     public function test_it_throws_exception_when_unbalanced()
     {
         $this->expectException(UnbalancedJournalException::class);
