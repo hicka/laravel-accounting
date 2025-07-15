@@ -1,13 +1,11 @@
 <?php
 
-namespace Hickr\Accounting\Tests\Actions;
+namespace Hickr\Accounting\Tests\Actions\Journals;
 
+use Hickr\Accounting\Actions\Journals\ApproveJournalEntryAction;
 use Hickr\Accounting\Models\JournalEntry;
-use Hickr\Accounting\Actions\ApproveJournalEntryAction;
 use Hickr\Accounting\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Auth\User;
 
 class ApproveJournalEntryActionTest extends TestCase
 {

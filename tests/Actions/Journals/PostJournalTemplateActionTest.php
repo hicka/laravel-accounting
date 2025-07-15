@@ -1,8 +1,8 @@
 <?php
 
-namespace Hickr\Accounting\Tests\Actions;
+namespace Hickr\Accounting\Tests\Actions\Journals;
 
-use Hickr\Accounting\Actions\PostJournalTemplateAction;
+use Hickr\Accounting\Actions\Journals\PostJournalTemplateAction;
 use Hickr\Accounting\Models\ChartOfAccount;
 use Hickr\Accounting\Models\JournalTemplate;
 use Hickr\Accounting\Models\JournalTemplateLine;

@@ -1,9 +1,8 @@
 <?php
 
-namespace Hickr\Accounting\Actions;
+namespace Hickr\Accounting\Actions\Journals;
 
 use Hickr\Accounting\Models\JournalEntry;
-use Illuminate\Support\Facades\Auth;
 
 class ApproveJournalEntryAction
 {

@@ -1,9 +1,8 @@
 <?php
 
-namespace Hickr\Accounting\Actions;
+namespace Hickr\Accounting\Actions\Journals;
 
 use Hickr\Accounting\Models\JournalTemplate;
-use Hickr\Accounting\Actions\PostJournalEntryAction;
 
 class PostJournalTemplateAction
 {

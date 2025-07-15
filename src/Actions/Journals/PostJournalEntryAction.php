@@ -1,13 +1,12 @@
 <?php
-namespace Hickr\Accounting\Actions;
+namespace Hickr\Accounting\Actions\Journals;
 
+use Hickr\Accounting\Exceptions\UnbalancedJournalException;
 use Hickr\Accounting\Models\ChartOfAccount;
-use Hickr\Accounting\Models\Tenant;
-use Illuminate\Support\Facades\DB;
 use Hickr\Accounting\Models\JournalEntry;
 use Hickr\Accounting\Models\JournalLine;
-use Hickr\Accounting\Support\Currency\MoneyFactory;
-use Hickr\Accounting\Exceptions\UnbalancedJournalException;
+use Hickr\Accounting\Models\Tenant;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 

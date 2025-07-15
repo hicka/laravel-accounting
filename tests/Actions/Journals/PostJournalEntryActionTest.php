@@ -1,15 +1,13 @@
 <?php
 
-namespace Hickr\Accounting\Tests\Actions;
+namespace Hickr\Accounting\Tests\Actions\Journals;
 
-use Hickr\Accounting\Models\Tenant;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Hickr\Accounting\Actions\PostJournalEntryAction;
+use Hickr\Accounting\Actions\Journals\PostJournalEntryAction;
+use Hickr\Accounting\Exceptions\UnbalancedJournalException;
 use Hickr\Accounting\Models\ChartOfAccount;
 use Hickr\Accounting\Models\JournalEntry;
-use Hickr\Accounting\Models\JournalLine;
-use Hickr\Accounting\Exceptions\UnbalancedJournalException;
-use Illuminate\Support\Facades\Schema;
+use Hickr\Accounting\Models\Tenant;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase;
 
 
@@ -89,7 +87,7 @@ class PostJournalEntryActionTest extends TestCase
         $debitAccount = \Hickr\Accounting\Models\ChartOfAccount::factory()->create();
         $creditAccount = \Hickr\Accounting\Models\ChartOfAccount::factory()->create();
 
-        $entry = \Hickr\Accounting\Actions\PostJournalEntryAction::execute([
+        $entry = \Hickr\Accounting\Actions\Journals\PostJournalEntryAction::execute([
             'tenant_id' => $tenant->id,
             'date' => now()->toDateString(),
             'description' => 'USD transaction',
@@ -126,7 +124,7 @@ class PostJournalEntryActionTest extends TestCase
         $debitAccount = \Hickr\Accounting\Models\ChartOfAccount::factory()->create();
         $creditAccount = \Hickr\Accounting\Models\ChartOfAccount::factory()->create();
 
-        \Hickr\Accounting\Actions\PostJournalEntryAction::execute([
+        \Hickr\Accounting\Actions\Journals\PostJournalEntryAction::execute([
             'tenant_id' => $tenant->id,
             'date' => now()->toDateString(),
             'description' => 'Broken entry',
