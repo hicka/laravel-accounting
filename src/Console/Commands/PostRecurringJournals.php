@@ -35,7 +35,7 @@ class PostRecurringJournals extends Command
         }
 
         $this->info("Posted $postedCount recurring journals.");
-        return CommandAlias::SUCCESS;
+        return Command::SUCCESS;
     }
 
     protected function shouldPostToday(JournalTemplate $template): bool

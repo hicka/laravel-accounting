@@ -27,8 +27,11 @@ class ChartOfAccount extends Model
 
     protected $fillable = [
         'tenant_id',
+        'code',
+        'name',
         'type',
-        'tax_type'
+        'tax_type',
+        'is_contra'
     ];
 
     protected static function newFactory()

@@ -6,18 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class JournalTemplate extends Model
 {
-    protected $guarded = [];
+    protected $table = 'journal_templates';
 
-    protected $fillable = [
-        'name',
-        'description',
-        'is_recurring',
-        'frequency',
-        'start_date',
-        'end_date',
-        'last_posted_at',
-        'tenant_id'
-    ];
+    protected $guarded = [];
 
     public function lines()
     {

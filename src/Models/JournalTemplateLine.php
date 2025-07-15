@@ -8,6 +8,8 @@ class JournalTemplateLine extends Model
 {
     protected $guarded = [];
 
+    protected $table = 'journal_template_lines';
+
     protected $fillable = [
       'tenant_id',
       'account_id',

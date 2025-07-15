@@ -8,7 +8,15 @@ class JournalEntry extends Model
 {
     protected $guarded = [];
 
-
+    protected $fillable = [
+        'tenant_id',
+        'reference',
+        'date',
+        'description',
+        'currency_code',
+        'exchange_rate',
+        'base_currency_amount'
+    ];
 
     protected static function booted()
     {

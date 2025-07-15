@@ -12,6 +12,17 @@ class JournalLine extends Model
         'meta' => 'array',
     ];
 
+    protected $fillable = [
+      'journal_entry_id',
+      'account_id',
+      'tenant_id',
+      'amount',
+      'meta',
+      'base_currency_amount',
+      'type',
+      'memo'
+    ];
+
     public function entry()
     {
         return $this->belongsTo(JournalEntry::class);
