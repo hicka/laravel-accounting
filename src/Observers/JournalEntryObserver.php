@@ -13,22 +13,31 @@ class JournalEntryObserver
         $this->log($entry, 'created');
     }
 
-    public function updated(JournalEntry $entry)
+    public function updated(JournalEntry $entry): void
     {
         $changes = [];
 
         foreach ($entry->getChanges() as $field => $newValue) {
-            $changes[$field] = [
-                'old' => $entry->getOriginal($field),
-                'new' => $newValue,
-            ];
+            if ($entry->isDirty($field)) {
+                $changes[$field] = [
+                    'old' => $entry->getOriginal($field),
+                    'new' => $newValue,
+                ];
+            }
         }
+
+        $action = match ($entry->status) {
+            'pending_approval' => 'submitted',
+            'approved' => 'approved',
+            'rejected' => 'rejected',
+            default => 'updated',
+        };
 
         JournalEntryAudit::create([
             'journal_entry_id' => $entry->id,
             'user_id' => auth()->id(),
-            'action' => 'updated',
-            'changes' => $changes,
+            'action' => $action,
+            'changes' => !empty($changes) ? $changes : null
         ]);
     }
 
