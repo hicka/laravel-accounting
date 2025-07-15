@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TenantConfig extends Model
 {
+    protected $table = 'tenant_configs';
+
     protected $fillable = [
         'tenant_id',
         'default_receivable_account_id',

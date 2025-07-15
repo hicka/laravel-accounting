@@ -2,10 +2,14 @@
 
 namespace Hickr\Accounting\Models;
 
+use Database\Factories\InvoiceLineFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class InvoiceLine extends Model
 {
+    use HasFactory;
+
     protected $guarded = [];
 
     protected $table = null;
@@ -14,6 +18,11 @@ class InvoiceLine extends Model
     {
         parent::__construct($attributes);
         $this->table = config('accounting.tables.invoice_lines', 'invoice_lines');
+    }
+
+    protected static function newFactory()
+    {
+        return InvoiceLineFactory::new();
     }
 
     public function invoice()

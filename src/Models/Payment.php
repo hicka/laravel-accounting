@@ -2,10 +2,14 @@
 
 namespace Hickr\Accounting\Models;
 
+use Database\Factories\PaymentFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
+    use HasFactory;
+
     protected $guarded = [];
 
     protected $table = null;
@@ -14,6 +18,11 @@ class Payment extends Model
     {
         parent::__construct($attributes);
         $this->table = config('accounting.tables.payments', 'payments');
+    }
+
+    protected static function newFactory()
+    {
+        return PaymentFactory::new();
     }
 
     public function invoice()

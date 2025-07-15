@@ -2,6 +2,7 @@
 
 namespace Hickr\Accounting\Actions;
 
+use Hickr\Accounting\Models\Invoice;
 use Hickr\Accounting\Models\Payment;
 use Hickr\Accounting\Models\JournalEntry;
 use Hickr\Accounting\Models\JournalLine;
@@ -16,6 +17,7 @@ class ReceivePaymentAction
         return DB::transaction(function () use ($data) {
             $tenantId = $data['tenant_id'];
             $invoice = $data['invoice'];
+            $invoice = Invoice::find($invoice->id);
             $amount = $data['amount'];
             $currency = $data['currency_code'] ?? 'MVR';
             $rate = $data['exchange_rate'] ?? 1;
@@ -25,6 +27,7 @@ class ReceivePaymentAction
 
             // 1. Create Payment
             $payment = Payment::create([
+                'customer_id' => $data['customer_id'],
                 'tenant_id'     => $tenantId,
                 'invoice_id'    => $invoice->id,
                 'amount'        => $amount,
@@ -63,8 +66,16 @@ class ReceivePaymentAction
                 ],
             ]);
 
-            // 4. Update Invoice (assumes paid column or similar logic)
+            $invoice = $invoice->fresh(); // Ensure we get the latest values
+
             $invoice->paid_amount += $amount;
+            $invoice->balance -= $amount;
+
+// Ensure balance never goes negative
+            if ($invoice->balance < 0) {
+                $invoice->balance = 0;
+            }
+
             $invoice->save();
 
             return $payment;
