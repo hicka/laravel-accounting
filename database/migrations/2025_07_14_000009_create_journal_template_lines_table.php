@@ -9,6 +9,7 @@ return new class extends Migration {
         Schema::create('journal_template_lines', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('template_id');
+            $table->unsignedBigInteger('tenant_id');
             $table->unsignedBigInteger('account_id');
             $table->enum('type', ['debit', 'credit']);
             $table->decimal('amount', 20, 6);

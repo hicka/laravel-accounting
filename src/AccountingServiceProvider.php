@@ -2,13 +2,18 @@
 
 namespace Hickr\Accounting;
 
+use Hickr\Accounting\Console\Commands\PostRecurringJournals;
 use Illuminate\Support\ServiceProvider;
 
 class AccountingServiceProvider extends ServiceProvider
 {
+
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/accounting.php', 'accounting');
+        $this->commands([
+            PostRecurringJournals::class,
+        ]);
     }
 
     public function boot()

@@ -38,6 +38,7 @@ class PostJournalTemplateActionTest extends TestCase
         ]);
 
         JournalTemplateLine::create([
+            'tenant_id' => $tenant->id,
             'template_id' => $template->id,
             'account_id' => $cash->id,
             'type' => 'credit',
@@ -45,6 +46,7 @@ class PostJournalTemplateActionTest extends TestCase
         ]);
 
         JournalTemplateLine::create([
+            'tenant_id' => $tenant->id,
             'template_id' => $template->id,
             'account_id' => $revenue->id,
             'type' => 'debit',

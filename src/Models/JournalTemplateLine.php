@@ -8,6 +8,14 @@ class JournalTemplateLine extends Model
 {
     protected $guarded = [];
 
+    protected $fillable = [
+      'tenant_id',
+      'account_id',
+      'amount',
+      'type',
+      'template_id'
+    ];
+
     public function account()
     {
         return $this->belongsTo(ChartOfAccount::class, 'account_id');
