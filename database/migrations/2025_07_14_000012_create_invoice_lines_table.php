@@ -15,6 +15,7 @@ return new class extends Migration {
                 $table->unsignedBigInteger('account_id');
                 $table->string('description')->nullable();
                 $table->decimal('amount', 20, 6);
+
                 $table->timestamps();
             });
         } else {

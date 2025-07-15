@@ -3,6 +3,8 @@
 namespace Hickr\Accounting;
 
 use Hickr\Accounting\Console\Commands\PostRecurringJournals;
+use Hickr\Accounting\Models\JournalEntry;
+use Hickr\Accounting\Observers\JournalEntryObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AccountingServiceProvider extends ServiceProvider
@@ -18,6 +20,8 @@ class AccountingServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        JournalEntry::observe(JournalEntryObserver::class);
+
         $region = config('accounting.region_module');
 
         if ($region === 'mira') {

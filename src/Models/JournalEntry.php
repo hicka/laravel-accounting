@@ -1,11 +1,14 @@
 <?php
 namespace Hickr\Accounting\Models;
 
+use Database\Factories\JournalEntryFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class JournalEntry extends Model
 {
+    use HasFactory;
     protected $guarded = [];
 
     protected $fillable = [
@@ -23,6 +26,11 @@ class JournalEntry extends Model
         static::creating(function ($entry) {
             $entry->reference = $entry->reference ?? \Str::uuid()->toString();
         });
+    }
+
+    protected static function newFactory()
+    {
+        return JournalEntryFactory::new();
     }
 
     public function lines(): HasMany

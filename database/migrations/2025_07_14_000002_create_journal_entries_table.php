@@ -15,6 +15,9 @@ return new class extends Migration {
             $table->string('currency_code');         // e.g., USD
             $table->decimal('exchange_rate', 18, 6); // exchange rate relative to base currency
             $table->decimal('base_currency_amount', 18, 2); // calculated value
+            $table->enum('status', ['draft', 'pending_approval', 'approved', 'rejected'])->default('draft');
+            $table->unsignedBigInteger('approved_by')->nullable();
+            $table->timestamp('approved_at')->nullable();
             $table->timestamps();
         });
     }

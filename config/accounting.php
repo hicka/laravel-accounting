@@ -2,7 +2,7 @@
 
 return [
     'models' => [
-
+        'user' => \Illuminate\Foundation\Auth\User::class,
         'customer' => \Hickr\Accounting\Models\Customer::class,
         'invoice' => \Hickr\Accounting\Models\Invoice::class,
         'invoice_line' => \Hickr\Accounting\Models\InvoiceLine::class,
