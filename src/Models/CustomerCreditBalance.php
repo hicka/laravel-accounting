@@ -9,14 +9,7 @@ class CustomerCreditBalance extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'tenant_id',
-        'customer_id',
-        'payment_id',
-        'amount',
-        'currency_code',
-        'exchange_rate',
-    ];
+   protected $guarded = [];
 
     protected static function newFactory()
     {

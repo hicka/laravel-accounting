@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('default_cash_account_id')->nullable();
             $table->unsignedBigInteger('default_sales_account_id')->nullable();
             $table->unsignedBigInteger('default_expense_account_id')->nullable();
+            $table->unsignedBigInteger('default_credit_account_id')->nullable();
 
             $table->json('meta')->nullable(); // for any future expansion
             $table->timestamps();

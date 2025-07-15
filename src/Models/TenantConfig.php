@@ -10,6 +10,7 @@ class TenantConfig extends Model
 
     protected $fillable = [
         'tenant_id',
+        'default_credit_account_id',
         'default_receivable_account_id',
         'default_payable_account_id',
         'default_cash_account_id',
