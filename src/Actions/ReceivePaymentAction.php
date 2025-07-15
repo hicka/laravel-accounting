@@ -2,6 +2,7 @@
 
 namespace Hickr\Accounting\Actions;
 
+use Hickr\Accounting\Models\CustomerCreditBalance;
 use Hickr\Accounting\Models\Invoice;
 use Hickr\Accounting\Models\Payment;
 use Hickr\Accounting\Models\JournalEntry;
@@ -67,17 +68,20 @@ class ReceivePaymentAction
             ]);
 
             if ($invoice->balance < 0) {
-                $overpaid = abs($invoice->balance);
                 $invoice->balance = 0;
                 $invoice->save();
 
+
+                $overpaidAmount = $amount - $invoice->balance;
+
                 CustomerCreditBalance::create([
-                    'tenant_id' => $tenantId,
-                    'customer_id' => $data['customer_id'],
-                    'payment_id' => $payment->id,
-                    'amount' => $overpaid,
-                    'currency_code' => $currency,
-                    'exchange_rate' => $rate,
+                    'tenant_id'           => $tenantId,
+                    'customer_id'         => $data['customer_id'],
+                    'payment_id'          => $payment->id,
+                    'amount'              => $overpaidAmount,
+                    'currency_code'       => $currency,
+                    'exchange_rate'       => $rate,
+                    'base_currency_amount'=> $rate * $overpaidAmount,
                 ]);
             } else {
                 $invoice->save();

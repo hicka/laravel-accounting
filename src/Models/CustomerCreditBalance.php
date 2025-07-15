@@ -32,4 +32,14 @@ class CustomerCreditBalance extends Model
     {
         return $this->belongsTo(Payment::class);
     }
+
+    public function getFormattedAmountAttribute(): string
+    {
+        return number_format($this->amount, 2) . ' ' . $this->currency_code;
+    }
+
+    public function getFormattedBaseAmountAttribute(): string
+    {
+        return number_format($this->base_currency_amount, 2) . ' (base)';
+    }
 }

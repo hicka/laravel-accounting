@@ -19,6 +19,7 @@ class CustomerCreditBalanceFactory extends Factory
             'amount' => $this->faker->randomFloat(2, 10, 1000),
             'currency_code' => 'MVR',
             'exchange_rate' => 1,
+            'base_currency_amount' => $this->faker->randomFloat(2, 10, 1000),
         ];
     }
 }
