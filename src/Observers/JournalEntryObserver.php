@@ -26,18 +26,27 @@ class JournalEntryObserver
             }
         }
 
-        $action = match ($entry->status) {
-            'pending_approval' => 'submitted',
-            'approved' => 'approved',
-            'rejected' => 'rejected',
-            default => 'updated',
-        };
+        // Special check for status transitions
+        $statusChanged = $entry->wasChanged('status');
+        $oldStatus = $entry->getOriginal('status');
+        $newStatus = $entry->status;
+
+        $action = 'updated';
+
+        if ($statusChanged) {
+            $action = match ($newStatus) {
+                'pending_approval' => 'submitted',
+                'approved' => 'approved',
+                'rejected' => 'rejected',
+                default => 'updated',
+            };
+        }
 
         JournalEntryAudit::create([
             'journal_entry_id' => $entry->id,
             'user_id' => auth()->id(),
             'action' => $action,
-            'changes' => !empty($changes) ? $changes : null
+            'changes' => !empty($changes) ? json_encode($changes) : null,
         ]);
     }
 

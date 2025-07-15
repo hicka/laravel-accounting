@@ -61,7 +61,7 @@ class JournalEntryObserverTest extends TestCase
             ->where('action', 'updated')
             ->first();
 
-        $changes = $audit->changes;
+        $changes = json_decode($audit->changes, true); // `true` gives you an array
 
         $this->assertEquals('Initial Desc', $changes['description']['old']);
         $this->assertEquals('Updated Desc', $changes['description']['new']);
@@ -89,5 +89,21 @@ class JournalEntryObserverTest extends TestCase
         $audit = \Hickr\Accounting\Models\JournalEntryAudit::latest()->first();
 
         $this->assertNull($audit->changes);
+    }
+
+    public function test_it_logs_journal_entry_submission()
+    {
+        $tenant = Tenant::factory()->create();
+        $entry = JournalEntry::factory()->create([
+            'tenant_id' => $tenant->id,
+            'status' => 'draft',
+        ]);
+
+        $entry->update(['status' => 'pending_approval']);
+
+        $this->assertDatabaseHas('journal_entry_audits', [
+            'journal_entry_id' => $entry->id,
+            'action' => 'submitted',
+        ]);
     }
 }

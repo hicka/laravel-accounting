@@ -11,16 +11,6 @@ class JournalEntry extends Model
     use HasFactory;
     protected $guarded = [];
 
-    protected $fillable = [
-        'tenant_id',
-        'reference',
-        'date',
-        'description',
-        'currency_code',
-        'exchange_rate',
-        'base_currency_amount'
-    ];
-
     protected static function booted()
     {
         static::creating(function ($entry) {
