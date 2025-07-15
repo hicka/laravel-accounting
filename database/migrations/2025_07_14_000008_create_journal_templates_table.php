@@ -14,8 +14,11 @@ return new class extends Migration {
             $table->string('currency_code', 3)->default('MVR');
             $table->decimal('exchange_rate', 20, 6)->default(1);
             $table->boolean('inverse')->default(false);
-            $table->date('start_date')->nullable(); // when it begins
-            $table->string('recurrence')->nullable(); // daily, weekly, monthly, etc.
+            $table->boolean('is_recurring')->default(false);
+            $table->enum('frequency', ['daily', 'weekly', 'monthly', 'yearly'])->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->dateTime('last_posted_at')->nullable();
             $table->boolean('auto_post')->default(false); // whether to auto-post
             $table->timestamps();
         });
