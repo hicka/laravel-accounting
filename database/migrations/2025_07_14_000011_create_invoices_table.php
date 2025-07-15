@@ -19,6 +19,7 @@ return new class extends Migration {
                 $table->decimal('total', 20, 6);
                 $table->decimal('paid_amount', 20, 6)->default(0);
                 $table->decimal('balance', 20, 6)->default(0);
+                $table->decimal('overpaid_amount', 20, 2)->default(0);
                 $table->string('currency_code', 3)->default('MVR');
                 $table->string('status')->default('unpaid');
                 $table->timestamps();
@@ -26,7 +27,7 @@ return new class extends Migration {
         } else {
             Schema::table($tableName, function (Blueprint $table) {
                 foreach ([
-                             'tenant_id', 'customer_id', 'date', 'invoice_number', 'total', 'balance', 'status','currency_code','due_date','paid_amount'
+                             'tenant_id', 'customer_id', 'date', 'invoice_number', 'total', 'balance', 'status','currency_code','due_date','paid_amount','overpaid_amount'
                          ] as $column) {
                     if (!Schema::hasColumn($table->getTable(), $column)) {
                         match ($column) {
@@ -38,6 +39,7 @@ return new class extends Migration {
                             'currency_code' => $table->string('currency_code', 3)->default('MVR'),
                             'due_date' =>  $table->date('due_date')->nullable(),
                             'paid_amount' => $table->decimal('paid_amount', 20, 6)->nullable(),
+                            'overpaid_amount' => $table->decimal('overpaid_amount', 20, 6)->nullable(),
                             default => null
                         };
                     }

@@ -5,6 +5,7 @@ namespace Hickr\Accounting\Tests\Actions;
 use Hickr\Accounting\Actions\ReceivePaymentAction;
 use Hickr\Accounting\Models\ChartOfAccount;
 use Hickr\Accounting\Models\Customer;
+use Hickr\Accounting\Models\CustomerCreditBalance;
 use Hickr\Accounting\Models\Invoice;
 use Hickr\Accounting\Models\Tenant;
 use Hickr\Accounting\Models\TenantConfig;
@@ -54,5 +55,17 @@ class ReceivePaymentActionTest extends TestCase
 
         $this->assertEquals(0.00, $invoice->fresh()->balance);
 
+    }
+
+    public function test_it_saves_customer_credit_balance()
+    {
+        $credit = CustomerCreditBalance::factory()->create([
+            'amount' => 500,
+        ]);
+
+        $this->assertDatabaseHas('customer_credit_balances', [
+            'id' => $credit->id,
+            'amount' => 500,
+        ]);
     }
 }

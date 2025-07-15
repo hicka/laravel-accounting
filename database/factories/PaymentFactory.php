@@ -16,7 +16,7 @@ class PaymentFactory extends Factory
             'customer_id' => 1,
             'amount' => 1000.00,
             'currency_code' => 'MVR',
-            'payment_date' => now()->toDateString(),
+            'date' => now()->toDateString(),
         ];
     }
 }

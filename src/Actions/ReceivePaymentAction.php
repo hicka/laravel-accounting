@@ -66,17 +66,22 @@ class ReceivePaymentAction
                 ],
             ]);
 
-            $invoice = $invoice->fresh(); // Ensure we get the latest values
-
-            $invoice->paid_amount += $amount;
-            $invoice->balance -= $amount;
-
-// Ensure balance never goes negative
             if ($invoice->balance < 0) {
+                $overpaid = abs($invoice->balance);
                 $invoice->balance = 0;
-            }
+                $invoice->save();
 
-            $invoice->save();
+                CustomerCreditBalance::create([
+                    'tenant_id' => $tenantId,
+                    'customer_id' => $data['customer_id'],
+                    'payment_id' => $payment->id,
+                    'amount' => $overpaid,
+                    'currency_code' => $currency,
+                    'exchange_rate' => $rate,
+                ]);
+            } else {
+                $invoice->save();
+            }
 
             return $payment;
         });
