@@ -32,9 +32,14 @@ class JournalEntryObserver
         ]);
     }
 
-    public function deleted(JournalEntry $entry)
+    public function deleted(JournalEntry $entry): void
     {
-        $this->log($entry, 'deleted');
+        JournalEntryAudit::create([
+            'journal_entry_id' => $entry->id,
+            'user_id' => auth()->id(),
+            'action' => 'deleted',
+            'changes' => null, // we don't need to store field-level changes for deletion
+        ]);
     }
 
     protected function log(JournalEntry $entry, string $action, array $changes = null)
