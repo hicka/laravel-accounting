@@ -66,4 +66,28 @@ class JournalEntryObserverTest extends TestCase
         $this->assertEquals('Initial Desc', $changes['description']['old']);
         $this->assertEquals('Updated Desc', $changes['description']['new']);
     }
+
+    public function test_it_logs_deleted_journal_entry()
+    {
+        $tenant = Tenant::factory()->create();
+
+        $entry = JournalEntry::factory()->create([
+            'tenant_id' => $tenant->id,
+            'description' => 'Delete Me',
+            'currency_code' => 'MVR',
+            'exchange_rate' => 1,
+            'base_currency_amount' => 1000,
+        ]);
+
+        $entry->delete();
+
+        $this->assertDatabaseHas('journal_entry_audits', [
+            'journal_entry_id' => $entry->id,
+            'action' => 'deleted',
+        ]);
+
+        $audit = \Hickr\Accounting\Models\JournalEntryAudit::latest()->first();
+
+        $this->assertNull($audit->changes);
+    }
 }
