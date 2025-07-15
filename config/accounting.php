@@ -1,6 +1,15 @@
 <?php
 
 return [
+    'models' => [
+
+        'customer' => \Hickr\Accounting\Models\Customer::class,
+        'invoice' => \Hickr\Accounting\Models\Invoice::class,
+        'invoice_line' => \Hickr\Accounting\Models\InvoiceLine::class,
+        'payment' => \Hickr\Accounting\Models\Payment::class,
+
+    ],
+
     'multi_currency' => true,
     'multi_tenant' => true,
     'default_currency' => 'MVR',
