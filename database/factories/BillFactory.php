@@ -15,8 +15,8 @@ class BillFactory extends Factory
         return [
             'tenant_id' => 1,
             'vendor_id' => Vendor::factory(),
-            'bill_number' => strtoupper($this->faker->bothify('BILL-####')),
-            'bill_date' => now()->subDays(rand(1, 30)),
+            'reference' => strtoupper($this->faker->bothify('BILL-####')),
+            'date' => now()->subDays(rand(1, 30)),
             'due_date' => now()->addDays(rand(5, 30)),
             'currency_code' => 'MVR',
             'exchange_rate' => 1,

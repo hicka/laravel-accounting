@@ -2,6 +2,7 @@
 
 namespace Hickr\Accounting\Models;
 
+use Database\Factories\BillLineFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,9 +10,12 @@ class BillLine extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'bill_id', 'account_id', 'amount', 'description'
-    ];
+    protected $guarded = [];
+
+    protected static function newFactory()
+    {
+        return BillLineFactory::new();
+    }
 
     public function account()
     {
